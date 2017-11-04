@@ -4,8 +4,8 @@
         <PLUGINS>
             <PLUGIN name="maven-archetype-plugin">
                 <GOALS>
-                    <GOAL name="generate">
-                    </GOAL>
+                    <GOAL name="generate" desc="生成一个新项目"/>
+                    <GOAL name="create-from-project" desc="从当前项目创建一个Maven项目" />
                 </GOALS>
             </PLUGIN>
         </PLUGINS>
@@ -14,9 +14,9 @@
         <PLUGINS>
             <PLUGIN name="maven-compiler-plugin">
                 <GOALS>
-                    <GOAL name="compile">
-                        <PARAM id="param1" value="abc" />
-                    </GOAL>
+                    <GOAL name="compile" desc="编译源代码"></GOAL>
+                    <GOAL name="testCompile" desc="编译测试代码"></GOAL>
+                    <GOAL name="help" desc="显示插件帮助信息"></GOAL>
                 </GOALS>
             </PLUGIN>
         </PLUGINS>
@@ -36,6 +36,16 @@
                 <GOALS>
                     <GOAL name="package" />
                     <GOAL name="package-site" />
+                </GOALS>
+            </PLUGIN>
+        </PLUGINS>
+    </PHASE>
+    <PHASE name="安装">
+        <PLUGINS>
+            <PLUGIN name="maven-install-plugin">
+                <GOALS>
+                    <GOAL name="install" desc="将当前项目安装到本地仓库"/>
+                    <GOAL name="install-file" desc="将一个文件安装到本地仓库"/>
                 </GOALS>
             </PLUGIN>
         </PLUGINS>
