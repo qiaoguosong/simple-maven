@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ROOT name="Maven项目周期">
+    <PHASE name="创建项目">
+        <PLUGINS>
+            <PLUGIN name="maven-archetype-plugin">
+                <GOALS>
+                    <GOAL name="generate">
+                    </GOAL>
+                </GOALS>
+            </PLUGIN>
+        </PLUGINS>
+    </PHASE>
+    <PHASE name="编译">
+        <PLUGINS>
+            <PLUGIN name="maven-compiler-plugin">
+                <GOALS>
+                    <GOAL name="compile">
+                        <PARAM id="param1" value="abc" />
+                    </GOAL>
+                </GOALS>
+            </PLUGIN>
+        </PLUGINS>
+    </PHASE>
+    <PHASE name="测试">
+        <PLUGINS>
+            <PLUGIN name="maven-test-plugin">
+                <GOALS>
+                    <GOAL name="test" />
+                </GOALS>
+            </PLUGIN>
+        </PLUGINS>
+    </PHASE>
+    <PHASE name="打包">
+        <PLUGINS>
+            <PLUGIN name="maven-package-plugin">
+                <GOALS>
+                    <GOAL name="package" />
+                    <GOAL name="package-site" />
+                </GOALS>
+            </PLUGIN>
+        </PLUGINS>
+    </PHASE>
+</ROOT>
