@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ROOT name="Maven项目周期">
-    <PHASE name="创建项目">
+    <PHASE name="创建">
         <PLUGINS>
             <PLUGIN name="maven-archetype-plugin">
                 <GOALS>

@@ -1,4 +1,9 @@
 #-*- coding:utf-8 -*-
+#----------------------------------------
+# Purpose: 简单功能实现，与控件耦合
+#  Author: puwow
+#   CDate: 2017.11.05
+#----------------------------------------
 
 import os
 import bs4
@@ -36,3 +41,4 @@ class SimpleMaven( object ):
                                 for goal in plugin.goals.children:
                                     if type(goal) is bs4.Tag:
                                         goal_node = controls.AppendItem( plugin_node, goal['name'] )
+                controls.Expand(root)
