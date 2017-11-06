@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ROOT name="Maven项目周期">
-    <PHASE name="创建">
+    <PHASE name="创建" desc="<p style='color:red;font-size:28pt;'>创建项目</p>">
         <PLUGINS>
-            <PLUGIN name="maven-archetype-plugin">
+            <PLUGIN name="maven-archetype-plugin" desc="项目骨架插件">
                 <GOALS>
-                    <GOAL name="generate" desc="生成一个新项目"/>
+                    <GOAL name="generate" desc="生成一个新项目">
+                        <PARAMS>
+                            <PARAM name="-DgroupId" value="" desc="指定机构等信息" exp="com.puwow"/>
+                            <PARAM name="-DarchfactId" value="" desc="项目名称" exp="MavenDemo"/>
+                            <PARAM name="-Dversion" value="" desc="版本号" exp="V1.0-SNAPSHOT"/>
+                            <PARAM name="-DinteractiveMode" value="true|false" desc="是否使用交互模式"/>
+                            <PARAM name="-DarchetypeCatalog" value="local|remote" desc="仓库"/>
+                            <PARAM name="-DarchetypeArchfactId" value="" desc="项目骨架名称"/>
+                        </PARAMS>
+                    </GOAL>
                     <GOAL name="create-from-project" desc="从当前项目创建一个Maven项目" />
                 </GOALS>
             </PLUGIN>
         </PLUGINS>
     </PHASE>
-    <PHASE name="编译">
+    <PHASE name="编译" desc="编译项目">
         <PLUGINS>
-            <PLUGIN name="maven-compiler-plugin">
+            <PLUGIN name="maven-compiler-plugin" desc="编译项目插件">
                 <GOALS>
                     <GOAL name="compile" desc="编译源代码"></GOAL>
                     <GOAL name="testCompile" desc="编译测试代码"></GOAL>
@@ -21,28 +30,28 @@
             </PLUGIN>
         </PLUGINS>
     </PHASE>
-    <PHASE name="测试">
+    <PHASE name="测试" desc="项目测试">
         <PLUGINS>
-            <PLUGIN name="maven-test-plugin">
+            <PLUGIN name="maven-test-plugin" desc="项目测试插件">
                 <GOALS>
-                    <GOAL name="test" />
+                    <GOAL name="test"  desc="测试目标" />
                 </GOALS>
             </PLUGIN>
         </PLUGINS>
     </PHASE>
-    <PHASE name="打包">
+    <PHASE name="打包" desc="打包项目">
         <PLUGINS>
-            <PLUGIN name="maven-package-plugin">
+            <PLUGIN name="maven-package-plugin" desc="项目打包插件">
                 <GOALS>
-                    <GOAL name="package" />
-                    <GOAL name="package-site" />
+                    <GOAL name="package" desc="项目打包目标" />
+                    <GOAL name="package-site" desc="打包" />
                 </GOALS>
             </PLUGIN>
         </PLUGINS>
     </PHASE>
-    <PHASE name="安装">
+    <PHASE name="安装" desc="安装项目">
         <PLUGINS>
-            <PLUGIN name="maven-install-plugin">
+            <PLUGIN name="maven-install-plugin" desc="项目安装插件">
                 <GOALS>
                     <GOAL name="install" desc="将当前项目安装到本地仓库"/>
                     <GOAL name="install-file" desc="将一个文件安装到本地仓库"/>

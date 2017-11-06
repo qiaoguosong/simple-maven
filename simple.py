@@ -31,14 +31,14 @@ class SimpleMaven( object ):
         else:
             if os.path.exists(xmlFile):
                 soup = BeautifulSoup( open(xmlFile).read(), 'lxml' )
-                root = controls.AddRoot(soup.root['name'])
+                root = controls.AddRoot(soup.root['name'], data=soup.root.get('desc'))
                 for phase in soup.root.children:
                     if type(phase) is bs4.Tag:
-                        phase_node = controls.AppendItem( root, phase['name'] )
+                        phase_node = controls.AppendItem( root, phase['name'], data=phase.get('desc') )
                         for plugin in phase.plugins.children:
                             if type(plugin) is bs4.Tag:
-                                plugin_node = controls.AppendItem( phase_node, plugin['name'] )
+                                plugin_node = controls.AppendItem( phase_node, plugin['name'], data=plugin.get('desc') )
                                 for goal in plugin.goals.children:
                                     if type(goal) is bs4.Tag:
-                                        goal_node = controls.AppendItem( plugin_node, goal['name'] )
+                                        goal_node = controls.AppendItem( plugin_node, goal['name'], data=goal.get('desc') )
                 controls.Expand(root)

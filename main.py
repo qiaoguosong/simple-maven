@@ -9,12 +9,13 @@ import os
 import wx
 import wx.html
 import markdown
+import logging
+from wx.py.editwindow import EditWindow
 from simple import SimpleMaven
-from control import EditDialog
+from control import EditDialog,MyLogHandler
 
 TREE_DATA_XML=os.path.join(os.getcwd(),"TreeData.xml")
 __version__='v1.0.0'
-print TREE_DATA_XML
 class MainFrame( wx.Frame ):
     #主框架类
     def __init__( self, parent=None, title=u'简单Maven', pos=wx.DefaultPosition, \
@@ -32,14 +33,27 @@ class MainFrame( wx.Frame ):
         self.html = wx.html.HtmlWindow(self)
         self.html.SetHTMLBackgroundColour("medium goldenrod")
 
+        self.log = EditWindow( self )
+        #self.log.SetReadOnly(True)
+        self.log.setDisplayLineNumbers(True)
+        handler = MyLogHandler( "root", control=self.log )
+        logging.getLogger().setLevel(logging.INFO)
+        logging.getLogger().addHandler(handler)
+
+        vbox = wx.BoxSizer( wx.VERTICAL )
         box = wx.BoxSizer( wx.HORIZONTAL )
-        box.Add( self.tree, -1, wx.EXPAND|wx.ALL, 3 )
-        box.Add( self.html, 2, wx.EXPAND|wx.RIGHT|wx.TOP|wx.BOTTOM, 3 )
-        self.SetSizer( box )
+        box.Add( self.tree, -1, wx.EXPAND|wx.RIGHT, 3 )
+        box.Add( self.html, 2, wx.EXPAND, 3 )
+        vbox.Add( box, 5, wx.EXPAND|wx.ALL, 3 )
+        vbox.Add( self.log, 1, wx.EXPAND|wx.RIGHT|wx.LEFT|wx.BOTTOM, 3 ) 
+        self.SetSizer( vbox )
 
         #创建SimpleMaven对象，加载TreeData.xml文件
         self.simpleMaven = SimpleMaven()
         wx.CallAfter( self.DataInit, controls=self.tree )
+
+        self.Bind( wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnTreeRightClick, self.tree )
+        self.Bind( wx.EVT_TREE_SEL_CHANGED, self.OnTreeChanged, self.tree )
 
     def createStatusBar( self ):
         #创建状态栏
@@ -55,9 +69,15 @@ class MainFrame( wx.Frame ):
         self.Bind( wx.EVT_MENU, self.OnEditTreeData, edit_tree_data )
         menuBar.Append(menuTool, "&工具" )
 
-
         self.SetMenuBar(menuBar)
     #事件处理
+    def OnTreeChanged( self, event ):
+        if event.GetItem() == event.GetEventObject().GetRootItem():
+            with open( "README.md" ) as fp:
+                self.html.SetPage(markdown.markdown(fp.read().decode("UTF-8")))
+        else:
+            self.html.SetPage( event.GetEventObject().GetItemData(event.GetItem()) )
+            logging.info(event.GetEventObject().GetItemData(event.GetItem()) )
     def OnEditTreeData( self, event ):
         parentSize=self.GetClientSize()
         edit = EditDialog(self, size=(parentSize[0]*0.8,parentSize[1]*0.8), title="文件预览")
@@ -73,7 +93,26 @@ class MainFrame( wx.Frame ):
         with open( "README.md" ) as fp:
             txt = markdown.markdown(fp.read().decode("UTF-8"))
             self.html.SetPage(txt)
-
+    def OnTreeRightClick( self, event ):
+        if not hasattr( self, "addNodeId" ):
+            self.addNodeId = wx.NewId()
+            self.removeNodeId = wx.NewId()
+            self.changeNodeId = wx.NewId()
+            self.Bind( wx.EVT_MENU, self.OnAddNode, id=self.addNodeId )
+            self.Bind( wx.EVT_MENU, self.OnRemoveNode, id=self.removeNodeId )
+            self.Bind( wx.EVT_MENU, self.OnChangeNode, id=self.changeNodeId )
+        menu = wx.Menu()
+        menu.Append( wx.MenuItem(menu, id=self.addNodeId, text="添加子节点") )
+        menu.Append( wx.MenuItem(menu, id=self.removeNodeId, text="删除子节点") )
+        menu.Append( wx.MenuItem(menu, id=self.changeNodeId, text="修改字节点") )
+        self.PopupMenu( menu, event.GetPoint() )
+        menu.Destroy()
+    def OnAddNode( self, event ):
+        print self.tree.GetSelection()
+    def OnRemoveNode( self, event ):
+        pass
+    def OnChangeNode( self, event ):
+        pass
 
 if __name__ == '__main__':
     app = wx.App()

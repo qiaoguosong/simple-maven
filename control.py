@@ -6,6 +6,7 @@
 #----------------------------------------
 
 import wx
+import logging
 from wx.py.editwindow import EditWindow
 
 class EditDialog( wx.Dialog ):
@@ -18,6 +19,17 @@ class EditDialog( wx.Dialog ):
             edit.SetText( fp.read())
     def SetReadOnly( self, flag=True ):
         self.edit.SetReadOnly(flag)
+
+class MyLogHandler( logging.Handler ):
+    #日志处理器
+    def __init__( self, name, level=0, control=None ):
+        logging.Handler.__init__( self, level=level )
+        self.control = control
+    def emit( self, record ):
+        if self.control:
+            if self.control.GetText():
+                self.control.NewLine()
+            self.control.AddText(record.getMessage())
 
 
 if __name__ == '__main__':
